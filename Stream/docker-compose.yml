@@ -39,4 +39,4 @@ services:
       - PLEX_CLAIM= #Token optional
     volumes:
       - /DATA/DockerData/Plex/plexms/config:/config
-      - /DATA/DockerData/Plex/data:/data
+      - /DATA/DockerData/Plex/data/mount:/data
