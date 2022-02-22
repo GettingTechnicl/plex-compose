@@ -1,0 +1,54 @@
+version: ‘3.8’
+services:
+  rclone:
+    container_name: rclone_vfs
+    image: rclone/rclone
+    restart: unless-stopped
+    environment:
+      - PUID=1002
+      - PGID=1004
+    volumes:
+      - type: bind
+        source: /DATA/DockerData/Plex/data
+        target: /data/mount
+        bind:
+          propagation: shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - /DATA/DockerData/Plex/rclone/config:/config/rclone
+      - /DATA/DockerData/Plex/rclone/log:/log
+      - /DATA/DockerData/Plex/rclone/cache:/cache
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    command: "mount gd:Cloud   /data/mount    --allow-other --log-file /log/rclone.log --log-level DEBUG --poll-interval 10s --umask 002 --drive-pacer-min-sleep 10ms --drive-pacer-burst 200 --vfs-cache-mode full --cache-dir /cache --vfs-cache-max-size 250G --vfs-cache-max-age 5000h --vfs-cache-poll-interval 5m --bwlimit-file 32M &"
+  plex:
+    container_name: plexms
+    image: horjulf/plex_autoscan
+    restart: unless-stopped
+    environment:
+      – PUID=1002
+      – PGID=1004
+      – TZ=America/Chicago
+      – PLEX_CLAIM=claim-<your-string>
+      – HOSTNAME=”PlexServer”
+    volumes:
+      - type: bind
+        source: /DATA/DockerData/Plex/data
+        target: /data
+        bind:
+          propagation: shared
+      – /DATA/DockerData/Plex/plexms/config:/config
+    ports:
+      – “32400:32400/tcp”
+      – “3005:3005/tcp”
+      – “8324:8324/tcp”
+      – “32469:32469/tcp”
+      – “1900:1900/udp”
+      – “32410:32410/udp”
+      – “32412:32412/udp”
+      – “32413:32413/udp”
+      – “32414:32414/udp”
