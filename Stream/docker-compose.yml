@@ -44,3 +44,7 @@ services:
         bind:
           propagation: rslave
       - /DATA/DockerData/Plex/plexms/config:/config
+<<<<<<< HEAD
+=======
+      - /DATA/DockerData/Plex/data/mount:/data
+>>>>>>> 9a9da15d8f1c9a32f5b7a300e2269001af16db11
