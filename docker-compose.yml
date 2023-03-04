@@ -4,6 +4,7 @@ services:
     container_name: rclone_vfs
     image: rclone/rclone
     restart: unless-stopped
+    network_mode: host
     environment:
       - PUID=1002
       - PGID=1004
@@ -24,8 +25,7 @@ services:
       - /dev/fuse
     security_opt:
       - apparmor:unconfined
-    command: "mount gd:Cloud   /data/mount    --allow-other --log-file /log/rclone.log --log-level DEBUG --poll-interval 10s --umask 002 --drive-pacer-min-sleep 10ms --drive-pacer-burst 200 --vfs-cache-mode full --cache-dir /cache --vfs-cache-max-size 250G --vfs-cache-max-age 5000h --vfs-cache-poll-interval 5m --bwlimit-file 32M &"
-  plex:
+    command: "mount gd:Cloud   /data/mount    --allow-other --log-file /log/rclone.log --rc --rc-addr 0.0.0.0:5572 --log-level DEBUG --poll-interval 10s --umask 002 --drive-pacer-min-sleep 10ms --drive-pacer-burst 200 --vfs-cache-mode full --c>  plex:
     container_name: plexms
     image: horjulf/plex_autoscan
     restart: unless-stopped
@@ -36,7 +36,7 @@ services:
       - TZ=America/Chicago
       - HOSTNAME="Local-Arch"
       - VERSION=latest
-      - PLEX_CLAIM= #Token optional
+      - PLEX_CLAIM=claim-SzFnW6AhYps6Bs7Nh3ze
     volumes:
       - type: bind
         source: /DATA/DockerData/Plex/data/mount
@@ -44,7 +44,10 @@ services:
         bind:
           propagation: rslave
       - /DATA/DockerData/Plex/plexms/config:/config
+<<<<<<< HEAD:Stream/docker-compose.yml
 <<<<<<< HEAD
 =======
       - /DATA/DockerData/Plex/data/mount:/data
 >>>>>>> 9a9da15d8f1c9a32f5b7a300e2269001af16db11
+=======
+>>>>>>> 339310848a56087674cc6bfbb5b838e80f483f59:docker-compose.yml
